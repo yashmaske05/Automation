@@ -1,0 +1,119 @@
+"""
+To-Do List Application
+
+This script implements a console-based To-Do List manager with the following features:
+- Add tasks
+- Remove tasks
+- Edit tasks
+- Mark tasks as completed or pending
+- Save tasks to a file
+- Load tasks from a file
+
+Author: Your Name
+Date: 2025-05-31
+"""
+
+import json
+import os
+
+class Task:
+    """
+    Represents a single task in the to-do list.
+    
+    Attributes:
+        description (str): The text description of the task.
+        completed (bool): Whether the task is completed.
+    """
+    def __init__(self, description, completed=False):
+        self.description = description
+        self.completed = completed
+
+    def toggle_status(self):
+        """
+        Toggle the task's completion status.
+        """
+        self.completed = not self.completed
+
+    def to_dict(self):
+        """
+        Convert the Task instance to a dictionary for serialization.
+        """
+        return {"description": self.description, "completed": self.completed}
+
+    @staticmethod
+    def from_dict(data):
+        """
+        Create a Task instance from a dictionary.
+        """
+        return Task(data["description"], data["completed"])
+
+class ToDoList:
+    """
+    Represents the entire to-do list and its operations.
+    
+    Attributes:
+        tasks (list of Task): List containing all tasks.
+    """
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, description):
+        """
+        Add a new task with the given description to the list.
+        
+        Args:
+            description (str): Task description.
+        """
+        task = Task(description)
+        self.tasks.append(task)
+        print(f'Task added: "{description}"')
+
+    def remove_task(self, index):
+        """
+        Remove the task at the given index from the list.
+        
+        Args:
+            index (int): Index of the task to remove.
+        """
+        if 0 <= index < len(self.tasks):
+            removed = self.tasks.pop(index)
+            print(f'Task removed: "{removed.description}"')
+        else:
+            print("Invalid task index!")
+
+    def edit_task(self, index, new_description):
+        """
+        Edit the description of the task at the given index.
+        
+        Args:
+            index (int): Index of the task to edit.
+            new_description (str): New description for the task.
+        """
+        if 0 <= index < len(self.tasks):
+            old_description = self.tasks[index].description
+            self.tasks[index].description = new_description
+            print(f'Task updated: "{old_description}" --> "{new_description}"')
+        else:
+            print("Invalid task index!")
+
+    def toggle_task(self, index):
+        """
+        Toggle the completion status of the task at the given index.
+        
+        Args:
+            index (int): Index of the task to toggle.
+        """
+        if 0 <= index < len(self.tasks):
+            self.tasks[index].toggle_status()
+            status = "completed" if self.tasks[index].completed else "pending"
+            print(f'Task "{self.tasks[index].description}" marked as {status}.')
+        else:
+            print("Invalid task index!")
+
+    def list_tasks(self):
+        """
+        Print all tasks with their index, status, and description.
+        """
+        if not self.tasks:
+            print("No tasks in the list.")
+            ret
